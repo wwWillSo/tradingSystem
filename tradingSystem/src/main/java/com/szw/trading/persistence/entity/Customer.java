@@ -1,7 +1,6 @@
 package com.szw.trading.persistence.entity;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -83,18 +82,7 @@ public class Customer implements Serializable {
 	@Column(name = "identity_varify_status")
 	private int identityVarifyStatus;
 
-	@Column(name = "depart_id")
-	private BigInteger departId;
-
 	public Customer() {
-	}
-
-	public BigInteger getDepartId() {
-		return departId;
-	}
-
-	public void setDepartId(BigInteger departId) {
-		this.departId = departId;
 	}
 
 	public String getCustomerPortrait() {
