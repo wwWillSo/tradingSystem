@@ -3,6 +3,7 @@ package com.szw.trading.web.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -25,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @PropertySource(value = { "file:${user.dir}/config/application.properties", "file:${user.dir}/config/web.properties",
 		"file:${user.dir}/config/persistence.properties", "file:${user.dir}/config/redis.properties" })
 @EnableWebMvc
+@ComponentScan(basePackages = "com.szw")
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired

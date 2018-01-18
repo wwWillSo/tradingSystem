@@ -27,7 +27,7 @@ public class Customer implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "customer_id")
-	private int customerId;
+	private Integer customerId;
 
 	@Column(name = "customer_bank_account_id")
 	private String customerBankAccountId;
@@ -93,11 +93,11 @@ public class Customer implements Serializable {
 		this.customerPortrait = customerPortrait;
 	}
 
-	public int getCustomerId() {
-		return this.customerId;
+	public Integer getCustomerId() {
+		return customerId;
 	}
 
-	public void setCustomerId(int customerId) {
+	public void setCustomerId(Integer customerId) {
 		this.customerId = customerId;
 	}
 

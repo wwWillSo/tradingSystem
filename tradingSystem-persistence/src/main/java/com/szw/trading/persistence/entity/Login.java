@@ -23,7 +23,7 @@ public class Login implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "login_id")
-	private int loginId;
+	private Integer loginId;
 
 	private byte admin;
 
@@ -48,11 +48,11 @@ public class Login implements Serializable {
 	public Login() {
 	}
 
-	public int getLoginId() {
-		return this.loginId;
+	public Integer getLoginId() {
+		return loginId;
 	}
 
-	public void setLoginId(int loginId) {
+	public void setLoginId(Integer loginId) {
 		this.loginId = loginId;
 	}
 

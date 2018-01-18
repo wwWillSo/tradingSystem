@@ -10,5 +10,5 @@ import com.szw.trading.persistence.entity.Login;
 public interface LoginRepository extends JpaRepository<Login, Integer> {
 	public Login findByLoginName(String loginName);
 
-	public Login findByLoginId(int loginId);
+	public Login findByLoginId(Integer loginId);
 }
