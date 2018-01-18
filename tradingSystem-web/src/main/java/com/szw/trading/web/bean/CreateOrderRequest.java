@@ -13,8 +13,7 @@ public class CreateOrderRequest extends BaseRequest {
 	/** 股票代码 */
 	@NotEmpty(message = "必须输入")
 	private String stockCode;
-	/** 价格 */
-	@NotNull(message = "必须输入")
+	/** 价格，市价单不需输入，限价单必须输入 */
 	private BigDecimal orderPrice;
 	/** 手数 */
 	@NotNull(message = "必须输入")
