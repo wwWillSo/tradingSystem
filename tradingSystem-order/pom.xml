@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.szw.trading</groupId>
-	<artifactId>tradingSystem-web</artifactId>
+	<artifactId>tradingSystem-order</artifactId>
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>tradingSystem</name>
+	<name>tradingSystem-order</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>
@@ -31,9 +31,11 @@
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis</artifactId>
+			<groupId>com.szw</groupId>
+			<artifactId>commons-util</artifactId>
+			<version>1.0.0</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -43,11 +45,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-		</dependency>
-		
-		<dependency>  
-		    <groupId>org.springframework.boot</groupId>  
-		    <artifactId>spring-boot-starter-websocket</artifactId>  
 		</dependency>
 		
 		<dependency>
@@ -66,17 +63,6 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-log4j</artifactId>
 		    <version>1.2.5.RELEASE</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.szw</groupId>
-			<artifactId>commons-util</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
@@ -99,7 +85,7 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 	</dependencies>
-
+	
 	<build>
 		<plugins>
 			<plugin>
