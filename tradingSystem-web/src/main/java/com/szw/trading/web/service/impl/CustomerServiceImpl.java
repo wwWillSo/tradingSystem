@@ -20,6 +20,7 @@ import com.szw.trading.persistence.repository.LoginRepository;
 import com.szw.trading.web.bean.CreateOrderRequest;
 import com.szw.trading.web.bean.Response;
 import com.szw.trading.web.constants.OrderQueue;
+import com.szw.trading.web.constants.OrderType;
 import com.szw.trading.web.service.CustomerService;
 import com.szw.util.OrderNoGenerator;
 import com.szw.util.RedisCacheUtil;
@@ -56,7 +57,11 @@ public class CustomerServiceImpl implements CustomerService {
 		order.setTradingAccountId(cta.getTradingAccountId());
 		BeanUtils.copyProperties(request, order);
 
-		redisCacheUtil.insertCacheList(OrderQueue.ORIGINAL_QUEUE.name(), order);
+		if (OrderType.MARKET_ORDER == order.getOrderType()) {
+			redisCacheUtil.pushCacheList(OrderQueue.MARKET_ORDER_QUEUE.name(), order);
+		} else if (OrderType.LIMIT_ORDER == order.getOrderType()) {
+			redisCacheUtil.pushCacheList(OrderQueue.LIMIT_ORDER_QUEUE.name(), order);
+		}
 
 		return Response.SUCCESS(order);
 	}

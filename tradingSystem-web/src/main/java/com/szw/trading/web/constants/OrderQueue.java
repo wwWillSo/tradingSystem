@@ -3,13 +3,12 @@ package com.szw.trading.web.constants;
 public enum OrderQueue {
 
 	/**
-	 * 原始队列
+	 * 市价单队列
 	 */
-	ORIGINAL_QUEUE,
+	MARKET_ORDER_QUEUE,
 
 	/**
-	 * 待处理队列
+	 * 限价单队列
 	 */
-	WAITING_QUEUE,
-
+	LIMIT_ORDER_QUEUE,
 }
