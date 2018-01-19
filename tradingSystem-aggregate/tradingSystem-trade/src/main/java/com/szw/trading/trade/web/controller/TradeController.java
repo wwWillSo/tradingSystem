@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.szw.trading.persistence.entity.Order;
 import com.szw.trading.trade.web.service.TradeService;
 import com.szw.trading.web.bean.Response;
+import com.szw.trading.web.constants.OrderSide;
 
 
 @Controller
@@ -17,11 +18,14 @@ public class TradeController {
 	@Autowired
 	private TradeService tradeService;
 
-	@RequestMapping("/trade/buy")
+	@RequestMapping("/trade")
 	@ResponseBody
 	public Response trade(@RequestBody Order order) {
 
-		return tradeService.tradeBuy(order);
+		if (OrderSide.BUY == order.getOrderSide())
+			return tradeService.tradeBuy(order);
+		else
+			return tradeService.tradeSell(order);
 	}
 
 }

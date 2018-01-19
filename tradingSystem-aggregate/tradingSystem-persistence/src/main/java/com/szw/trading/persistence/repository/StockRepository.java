@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.szw.trading.persistence.entity.Stock;
 
 
-@Repository("stockRepository")
+@Repository
 public interface StockRepository extends JpaRepository<Stock, String> {
 
 }

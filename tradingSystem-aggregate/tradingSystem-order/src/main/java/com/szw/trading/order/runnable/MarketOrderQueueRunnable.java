@@ -34,11 +34,9 @@ public class MarketOrderQueueRunnable implements Callable<MarketOrderQueueRunnab
 	@Override
 	public MarketOrderQueueRunnable call() throws Exception {
 
-		try {
-
-			while (true) {
-
-				Order order = redisCacheUtil.popCacheList(OrderQueue.MARKET_ORDER_QUEUE.name());
+		while (true) {
+			Order order = redisCacheUtil.popCacheList(OrderQueue.MARKET_ORDER_QUEUE.name());
+			try {
 
 				if (null == order) {
 					continue;
@@ -62,26 +60,25 @@ public class MarketOrderQueueRunnable implements Callable<MarketOrderQueueRunnab
 					try {
 						Response resp = JSON.parseObject(returnStr, Response.class);
 						if (!resp.get_ReturnCode().equals(StatusCode.SUCCESS.getCode())) {
-							log.info("【市价单交易请求】交易失败，order：" + order);
+							log.info("【市价单交易请求】交易失败，order：" + JSON.toJSONString(order));
 						} else {
-							log.info("【市价单交易请求】交易成功，order：" + order);
+							log.info("【市价单交易请求】交易成功，order：" + JSON.toJSONString(order));
 						}
 					} catch (Exception e) {
-						log.info("【市价单交易请求】请求失败，重新进入市价单队列，order：" + order);
+						log.info("【市价单交易请求】请求失败，重新进入市价单队列，order：" + JSON.toJSONString(order));
 						redisCacheUtil.pushCacheList(OrderQueue.MARKET_ORDER_QUEUE.name(), order);
 					}
 
 				} else {
-					log.info("【市价单交易请求】请求失败，重新进入市价单队列，order：" + order);
+					log.info("【市价单交易请求】请求失败，重新进入市价单队列，order：" + JSON.toJSONString(order));
 					redisCacheUtil.pushCacheList(OrderQueue.MARKET_ORDER_QUEUE.name(), order);
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.info("【市价单交易请求】请求失败，重新进入市价单队列，order：" + JSON.toJSONString(order));
+				redisCacheUtil.pushCacheList(OrderQueue.MARKET_ORDER_QUEUE.name(), order);
+			} finally {
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
 		}
-
-		return null;
 	}
-
 }

@@ -1,12 +1,14 @@
 package com.szw.trading.web.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -26,7 +28,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @PropertySource(value = { "file:${user.dir}/config/application.properties", "file:${user.dir}/config/web.properties",
 		"file:${user.dir}/config/persistence.properties", "file:${user.dir}/config/redis.properties" })
 @EnableWebMvc
-@ComponentScan(basePackages = "com.szw")
+@ComponentScan(basePackages = { "com" })
+@EnableJpaRepositories(basePackages = { "com" })
+@EntityScan(basePackages = { "com" })
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired

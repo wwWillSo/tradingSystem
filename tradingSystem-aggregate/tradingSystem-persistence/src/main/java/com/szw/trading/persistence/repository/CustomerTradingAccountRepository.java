@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.szw.trading.persistence.entity.CustomerTradingAccount;
 
 
-@Repository("customerTradingAccountRepository")
+@Repository
 public interface CustomerTradingAccountRepository extends JpaRepository<CustomerTradingAccount, BigInteger> {
 
 	public CustomerTradingAccount findByCustomerId(Integer customerId);

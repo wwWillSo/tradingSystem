@@ -24,9 +24,17 @@ public class CreateOrderRequest extends BaseRequest {
 	/** 下单方向0：买入 1：卖出 */
 	@NotNull(message = "必须输入")
 	private Integer orderSide;
-	/** 订单类型0：普通单 1：平仓单 */
-	@NotNull(message = "必须输入")
-	private Integer isOffset;
+
+	/** 要卖出的单号 */
+	private String offsetOrderNo;
+
+	public String getOffsetOrderNo() {
+		return offsetOrderNo;
+	}
+
+	public void setOffsetOrderNo(String offsetOrderNo) {
+		this.offsetOrderNo = offsetOrderNo;
+	}
 
 	public String getStockCode() {
 		return stockCode;
@@ -66,14 +74,6 @@ public class CreateOrderRequest extends BaseRequest {
 
 	public void setOrderSide(Integer orderSide) {
 		this.orderSide = orderSide;
-	}
-
-	public Integer getIsOffset() {
-		return isOffset;
-	}
-
-	public void setIsOffset(Integer isOffset) {
-		this.isOffset = isOffset;
 	}
 
 }

@@ -33,9 +33,6 @@ public class Order implements Serializable {
 	@Column(name = "create_time")
 	private Date createTime;
 
-	@Column(name = "is_offset")
-	private int isOffset;
-
 	@Column(name = "order_amount")
 	private BigDecimal orderAmount;
 
@@ -59,6 +56,11 @@ public class Order implements Serializable {
 
 	private int status;
 
+	private int offsetted;
+
+	@Column(name = "offset_order_no")
+	private String offsetOrderNo;
+
 	@Column(name = "stock_code")
 	private String stockCode;
 
@@ -69,7 +71,34 @@ public class Order implements Serializable {
 	@Column(name = "update_time")
 	private Date updateTime;
 
+	@Column(name = "win_loss")
+	private BigDecimal winLoss;
+
 	public Order() {
+	}
+
+	public BigDecimal getWinLoss() {
+		return winLoss;
+	}
+
+	public void setWinLoss(BigDecimal winLoss) {
+		this.winLoss = winLoss;
+	}
+
+	public String getOffsetOrderNo() {
+		return offsetOrderNo;
+	}
+
+	public void setOffsetOrderNo(String offsetOrderNo) {
+		this.offsetOrderNo = offsetOrderNo;
+	}
+
+	public int getOffsetted() {
+		return offsetted;
+	}
+
+	public void setOffsetted(int offsetted) {
+		this.offsetted = offsetted;
 	}
 
 	public BigInteger getOrderId() {
@@ -86,14 +115,6 @@ public class Order implements Serializable {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
-	}
-
-	public int getIsOffset() {
-		return this.isOffset;
-	}
-
-	public void setIsOffset(int isOffset) {
-		this.isOffset = isOffset;
 	}
 
 	public BigDecimal getOrderAmount() {

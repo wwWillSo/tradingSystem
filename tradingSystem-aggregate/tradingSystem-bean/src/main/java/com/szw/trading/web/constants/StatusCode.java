@@ -19,6 +19,14 @@ public enum StatusCode {
 	 * 订单号重复
 	 */
 	ORDER_NO_EXISTS("E0004", "订单号重复"),
+	/**
+	 * 要卖出的订单号不存在
+	 */
+	OLD_ORDER_NO_NOT_EXISTS("E0005", "要卖出的订单号不存在"),
+	/**
+	 * 卖出数与原订单买入数不符
+	 */
+	QUANTITY_NOT_ENOUGH("E0006", "卖出数与原订单买入数不符"),
 
 	/**
 	 * 失败

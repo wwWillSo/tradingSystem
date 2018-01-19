@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.szw.trading.persistence.entity.Customer;
 
 
-@Repository(value = "customerRepository")
+@Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 	public Customer findByCustomerId(Integer customerId);
 }

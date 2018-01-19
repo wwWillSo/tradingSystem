@@ -20,6 +20,7 @@ import com.szw.trading.persistence.repository.LoginRepository;
 import com.szw.trading.persistence.repository.OrderRepository;
 import com.szw.trading.web.bean.CreateOrderRequest;
 import com.szw.trading.web.bean.Response;
+import com.szw.trading.web.constants.Offsetted;
 import com.szw.trading.web.constants.OrderQueue;
 import com.szw.trading.web.constants.OrderStatus;
 import com.szw.trading.web.constants.OrderType;
@@ -59,6 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
 		order.setCreateTime(new Date());
 		order.setUpdateTime(new Date());
 		order.setTradingAccountId(cta.getTradingAccountId());
+		order.setOffsetted(Offsetted.NO_OFFSETTED);
 		BeanUtils.copyProperties(request, order);
 		order.setStatus(OrderStatus.PENDING);
 

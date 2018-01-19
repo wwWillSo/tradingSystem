@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 import com.szw.trading.persistence.entity.InvestmentSummary;
 
 
-@Repository("investmentSummary")
+@Repository
 public interface InvestmentSummaryRepository extends JpaRepository<InvestmentSummary, BigInteger> {
 
+	public InvestmentSummary findByTradingAccountIdAndStockCode(BigInteger tradingAccountId, String stockCode);
 }

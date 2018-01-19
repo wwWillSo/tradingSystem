@@ -24,10 +24,10 @@ public class MarketOrderQueueProcessor {
 	private ExecutorService threadPool = Executors.newSingleThreadExecutor();
 
 	@Autowired
-	private RedisCacheUtil<Order> redisCacheUtil;
+	private OrderRepository orderRepository;
 
 	@Autowired
-	private OrderRepository orderRepository;
+	private RedisCacheUtil<Order> redisCacheUtil;
 
 	@Value("${getMarketDataByCode.url}")
 	private String getMarketDataByCodeUrl;
