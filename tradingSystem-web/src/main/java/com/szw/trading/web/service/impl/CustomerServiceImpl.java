@@ -17,9 +17,11 @@ import com.szw.trading.persistence.entity.Order;
 import com.szw.trading.persistence.repository.CustomerRepository;
 import com.szw.trading.persistence.repository.CustomerTradingAccountRepository;
 import com.szw.trading.persistence.repository.LoginRepository;
+import com.szw.trading.persistence.repository.OrderRepository;
 import com.szw.trading.web.bean.CreateOrderRequest;
 import com.szw.trading.web.bean.Response;
 import com.szw.trading.web.constants.OrderQueue;
+import com.szw.trading.web.constants.OrderStatus;
 import com.szw.trading.web.constants.OrderType;
 import com.szw.trading.web.service.CustomerService;
 import com.szw.util.OrderNoGenerator;
@@ -41,6 +43,8 @@ public class CustomerServiceImpl implements CustomerService {
 	private RedisCacheUtil<Order> redisCacheUtil;
 	@Autowired
 	private OrderNoGenerator orderNoGenerator;
+	@Autowired
+	private OrderRepository orderRepository;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
@@ -56,11 +60,14 @@ public class CustomerServiceImpl implements CustomerService {
 		order.setUpdateTime(new Date());
 		order.setTradingAccountId(cta.getTradingAccountId());
 		BeanUtils.copyProperties(request, order);
+		order.setStatus(OrderStatus.PENDING);
+
+		Order rtnOrder = orderRepository.save(order);
 
 		if (OrderType.MARKET_ORDER == order.getOrderType()) {
-			redisCacheUtil.pushCacheList(OrderQueue.MARKET_ORDER_QUEUE.name(), order);
+			redisCacheUtil.pushCacheList(OrderQueue.MARKET_ORDER_QUEUE.name(), rtnOrder);
 		} else if (OrderType.LIMIT_ORDER == order.getOrderType()) {
-			redisCacheUtil.pushCacheList(OrderQueue.LIMIT_ORDER_QUEUE.name(), order);
+			redisCacheUtil.pushCacheList(OrderQueue.LIMIT_ORDER_QUEUE.name(), rtnOrder);
 		}
 
 		return Response.SUCCESS(order);

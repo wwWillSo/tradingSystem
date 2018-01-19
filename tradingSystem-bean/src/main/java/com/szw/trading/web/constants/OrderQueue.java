@@ -11,4 +11,9 @@ public enum OrderQueue {
 	 * 限价单队列
 	 */
 	LIMIT_ORDER_QUEUE,
+
+	/**
+	 * 待成交队列
+	 */
+	TRADE_MANAGE_QUEUE,
 }

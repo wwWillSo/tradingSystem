@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.szw.trading</groupId>
-	<artifactId>tradingSystem-persistence</artifactId>
+	<artifactId>tradingSystem-bean</artifactId>
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>tradingSystem-persistence</name>
+	<name>tradingSystem-bean</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>
@@ -27,18 +27,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
-		<dependency>
-		    <groupId>com.alibaba</groupId>
-		    <artifactId>fastjson</artifactId>
-		    <version>1.2.39</version>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 	</dependencies>
 	

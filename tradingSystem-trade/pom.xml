@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.szw.trading</groupId>
-	<artifactId>tradingSystem-web</artifactId>
+	<artifactId>tradingSystem-trade</artifactId>
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>tradingSystem-web</name>
+	<name>tradingSystem-trade</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>
@@ -22,11 +22,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<spring.boot.version>1.2.6.RELEASE</spring.boot.version>
 	</properties>
 
 	<dependencies>
-		<dependency>
+	
+	<dependency>
 			<groupId>com.szw.trading</groupId>
 			<artifactId>tradingSystem-persistence</artifactId>
 			<version>1.0.0</version>
@@ -78,10 +78,12 @@
 		    <artifactId>spring-boot-starter-log4j</artifactId>
 		    <version>1.2.5.RELEASE</version>
 		</dependency>
-		
+	
+		<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>fastjson</artifactId>
+		    <version>1.2.39</version>
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
@@ -104,24 +106,15 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 	</dependencies>
-
+	
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>${spring.boot.version}</version>
-				<configuration>
-                    <executable>true</executable>
-                </configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
+
+
 </project>

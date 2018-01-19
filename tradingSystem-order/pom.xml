@@ -31,6 +31,11 @@
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
+			<groupId>com.szw.trading</groupId>
+			<artifactId>tradingSystem-bean</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
 			<groupId>com.szw</groupId>
 			<artifactId>commons-util</artifactId>
 			<version>1.0.0</version>
@@ -38,15 +43,9 @@
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
 		<dependency>
 		   <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter</artifactId>
@@ -84,6 +83,7 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
+		
 	</dependencies>
 	
 	<build>
