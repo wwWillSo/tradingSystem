@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.szw.trading.web.bean.CreateOrderRequest;
 import com.szw.trading.web.bean.Response;
+import com.szw.trading.web.bean.SearchRequest;
 import com.szw.trading.web.service.CustomerService;
 
 
@@ -35,6 +36,13 @@ public class CustomerController {
 		}
 
 		return customerService.createOrder(principal, request);
+	}
+
+	@RequestMapping("/customer/queryOrder")
+	@ResponseBody
+	public Response queryOrder(Principal principal, @RequestBody SearchRequest request) {
+
+		return customerService.queryOrder(principal, request);
 	}
 
 	public String getValidString(BindingResult bindingResult) {

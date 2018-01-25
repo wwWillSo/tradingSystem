@@ -1,5 +1,8 @@
 package com.szw.trading.web.config;
 
+import java.util.Properties;
+
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -22,6 +25,7 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageHelper;
 
 
 @Configuration
@@ -31,6 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ComponentScan(basePackages = { "com" })
 @EnableJpaRepositories(basePackages = { "com" })
 @EntityScan(basePackages = { "com" })
+@MapperScan("com.szw.trading.mybatis.mapper")
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired
@@ -103,5 +108,18 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 			System.out.println("staticResourcesPath is not in web.properties");
 		}
+	}
+
+	// 配置mybatis的分页插件pageHelper
+	@Bean
+	public PageHelper pageHelper() {
+		PageHelper pageHelper = new PageHelper();
+		Properties properties = new Properties();
+		properties.setProperty("offsetAsPageNum", "true");
+		properties.setProperty("rowBoundsWithCount", "true");
+		properties.setProperty("reasonable", "true");
+		properties.setProperty("dialect", "mysql");    // 配置mysql数据库的方言
+		pageHelper.setProperties(properties);
+		return pageHelper;
 	}
 }

@@ -10,6 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.szw.trading.mybatis.entity.Orders;
+import com.szw.trading.mybatis.entity.OrdersExample;
+import com.szw.trading.mybatis.mapper.OrdersMapper;
 import com.szw.trading.persistence.entity.Customer;
 import com.szw.trading.persistence.entity.CustomerTradingAccount;
 import com.szw.trading.persistence.entity.Login;
@@ -20,6 +25,7 @@ import com.szw.trading.persistence.repository.LoginRepository;
 import com.szw.trading.persistence.repository.OrderRepository;
 import com.szw.trading.web.bean.CreateOrderRequest;
 import com.szw.trading.web.bean.Response;
+import com.szw.trading.web.bean.SearchRequest;
 import com.szw.trading.web.constants.Offsetted;
 import com.szw.trading.web.constants.OrderQueue;
 import com.szw.trading.web.constants.OrderStatus;
@@ -47,6 +53,9 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	private OrderRepository orderRepository;
 
+	@Autowired
+	private OrdersMapper orderMapper;
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public Response createOrder(Principal principal, CreateOrderRequest request) {
@@ -73,6 +82,20 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 
 		return Response.SUCCESS(order);
+	}
+
+	@Override
+	public Response queryOrder(Principal principal, SearchRequest request) {
+
+		Login login = loginRepository.findByLoginId(Integer.valueOf(principal.getName()));
+		CustomerTradingAccount cta = customerTradingAccountRepository.findByCustomerId(login.getCustomerId());
+
+		PageHelper.startPage(request.getPageNo(), request.getPageSize());
+		OrdersExample example = new OrdersExample();
+		example.createCriteria().andTradingAccountIdEqualTo(cta.getTradingAccountId().longValue()).andStockCodeLike(request.getKeyword());
+		PageInfo<Orders> pageInfo = new PageInfo<Orders>(orderMapper.selectByExample(example));
+
+		return Response.SUCCESS(pageInfo.getList());
 	}
 
 }
