@@ -5,6 +5,7 @@ import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.szw.trading.order.runnable.LimitOrderQueueRunnable;
 import com.szw.trading.persistence.entity.Order;
@@ -16,6 +17,7 @@ import com.szw.util.RedisCacheUtil;
  * 
  * @author 苏镇威 2018年1月26日 下午4:34:13
  */
+@Service
 public class LimitOrderQueueProcessor {
 
 	private ExecutorService threadPool = Executors.newSingleThreadExecutor();
@@ -23,15 +25,17 @@ public class LimitOrderQueueProcessor {
 	@Autowired
 	private RedisCacheUtil<Order> redisCacheUtil;
 
-	@Value("${getMarketDataByCode.url}")
-	private String getMarketDataByCodeUrl;
-
 	@Value("${trade.url}")
 	private String tradeUrl;
 
+	@Value("${market.url}")
+	private String marketUrl;
+
+	private String title = "marketdata";
+
 	public void execute() {
 		try {
-			threadPool.submit(new LimitOrderQueueRunnable(redisCacheUtil, getMarketDataByCodeUrl, tradeUrl));
+			threadPool.submit(new LimitOrderQueueRunnable(redisCacheUtil, marketUrl, title, tradeUrl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

@@ -1,6 +1,6 @@
 package com.szw.trading.web.constants;
 
-public enum OrderQueue {
+public enum OrderQueueName {
 
 	/**
 	 * 市价单队列

@@ -27,7 +27,7 @@ import com.szw.trading.web.bean.CreateOrderRequest;
 import com.szw.trading.web.bean.Response;
 import com.szw.trading.web.bean.SearchRequest;
 import com.szw.trading.web.constants.Offsetted;
-import com.szw.trading.web.constants.OrderQueue;
+import com.szw.trading.web.constants.OrderQueueName;
 import com.szw.trading.web.constants.OrderStatus;
 import com.szw.trading.web.constants.OrderType;
 import com.szw.trading.web.service.CustomerService;
@@ -75,9 +75,9 @@ public class CustomerServiceImpl implements CustomerService {
 		Order rtnOrder = orderRepository.save(order);
 
 		if (OrderType.MARKET_ORDER == order.getOrderType()) {
-			redisCacheUtil.pushCacheList(OrderQueue.MARKET_ORDER_QUEUE.name(), rtnOrder);
+			redisCacheUtil.pushCacheList(OrderQueueName.MARKET_ORDER_QUEUE.name(), rtnOrder);
 		} else if (OrderType.LIMIT_ORDER == order.getOrderType()) {
-			redisCacheUtil.pushCacheList(OrderQueue.LIMIT_ORDER_QUEUE.name(), rtnOrder);
+			redisCacheUtil.pushCacheList(genLimitOrderQueueName(order.getStockCode()), rtnOrder);
 		}
 
 		return Response.SUCCESS(order);
@@ -95,6 +95,10 @@ public class CustomerServiceImpl implements CustomerService {
 		PageInfo<Orders> pageInfo = new PageInfo<Orders>(orderMapper.selectByExample(example));
 
 		return Response.SUCCESS(pageInfo.getList());
+	}
+
+	public String genLimitOrderQueueName(String stockcode) {
+		return OrderQueueName.LIMIT_ORDER_QUEUE.name() + ":" + stockcode;
 	}
 
 }

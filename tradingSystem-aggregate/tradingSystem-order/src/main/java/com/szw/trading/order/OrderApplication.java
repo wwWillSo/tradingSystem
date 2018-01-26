@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.szw.trading.order.processor.LimitOrderQueueProcessor;
 import com.szw.trading.order.processor.MarketOrderQueueProcessor;
 
 
@@ -16,10 +17,13 @@ public class OrderApplication {
 
 	@Autowired
 	private MarketOrderQueueProcessor marketOrderQueueProcessor;
+	@Autowired
+	private LimitOrderQueueProcessor limitOrderQueueProcessor;
 
 	@PostConstruct
 	public void init() {
 		marketOrderQueueProcessor.execute();
+		limitOrderQueueProcessor.execute();
 	}
 
 	public static void main(String[] args) {

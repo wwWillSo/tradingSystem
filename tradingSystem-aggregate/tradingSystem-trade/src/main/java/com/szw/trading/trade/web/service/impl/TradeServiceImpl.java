@@ -51,6 +51,8 @@ public class TradeServiceImpl implements TradeService {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public Response tradeBuy(Order order) {
 
+		log.info("【处理订单】开始...orderType = " + order.getOrderType());
+
 		CustomerTradingAccount cta = customerTradingAccountRepository.findOne(order.getTradingAccountId());
 
 		if (null == cta) {
@@ -104,6 +106,8 @@ public class TradeServiceImpl implements TradeService {
 		orderRepository.save(order);
 
 		log.info("【买入】交易成功, order = " + JSON.toJSONString(order));
+
+		log.info("【处理订单】结束...orderType = " + order.getOrderType());
 
 		return Response.SUCCESS(order);
 	}

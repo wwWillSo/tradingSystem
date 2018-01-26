@@ -1,5 +1,6 @@
 package com.szw.trading.trade.web.controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,8 @@ import com.szw.trading.web.constants.OrderSide;
 
 @Controller
 public class TradeController {
+
+	private Logger log = Logger.getLogger(getClass());
 
 	@Autowired
 	private TradeService tradeService;

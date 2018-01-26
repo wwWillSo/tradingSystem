@@ -9,7 +9,7 @@ import com.alibaba.fastjson.JSON;
 import com.szw.trading.persistence.entity.Order;
 import com.szw.trading.persistence.entity.RealTimeMarketdata;
 import com.szw.trading.web.bean.Response;
-import com.szw.trading.web.constants.OrderQueue;
+import com.szw.trading.web.constants.OrderQueueName;
 import com.szw.trading.web.constants.StatusCode;
 import com.szw.util.HttpClientUtils;
 import com.szw.util.RedisCacheUtil;
@@ -35,7 +35,7 @@ public class MarketOrderQueueRunnable implements Callable<MarketOrderQueueRunnab
 	public MarketOrderQueueRunnable call() throws Exception {
 
 		while (true) {
-			Order order = redisCacheUtil.popCacheList(OrderQueue.MARKET_ORDER_QUEUE.name());
+			Order order = redisCacheUtil.popCacheList(OrderQueueName.MARKET_ORDER_QUEUE.name());
 			try {
 
 				if (null == order) {
@@ -66,17 +66,17 @@ public class MarketOrderQueueRunnable implements Callable<MarketOrderQueueRunnab
 						}
 					} catch (Exception e) {
 						log.info("【市价单交易请求】请求失败，重新进入市价单队列，order：" + JSON.toJSONString(order));
-						redisCacheUtil.pushCacheList(OrderQueue.MARKET_ORDER_QUEUE.name(), order);
+						redisCacheUtil.pushCacheList(OrderQueueName.MARKET_ORDER_QUEUE.name(), order);
 					}
 
 				} else {
 					log.info("【市价单交易请求】请求失败，重新进入市价单队列，order：" + JSON.toJSONString(order));
-					redisCacheUtil.pushCacheList(OrderQueue.MARKET_ORDER_QUEUE.name(), order);
+					redisCacheUtil.pushCacheList(OrderQueueName.MARKET_ORDER_QUEUE.name(), order);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				log.info("【市价单交易请求】请求失败，重新进入市价单队列，order：" + JSON.toJSONString(order));
-				redisCacheUtil.pushCacheList(OrderQueue.MARKET_ORDER_QUEUE.name(), order);
+				log.info("【市价单交易请求】出现异常，重新进入市价单队列，order：" + JSON.toJSONString(order));
+				redisCacheUtil.pushCacheList(OrderQueueName.MARKET_ORDER_QUEUE.name(), order);
 			} finally {
 			}
 		}
