@@ -5,20 +5,18 @@ import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
-import com.szw.trading.order.runnable.MarketOrderQueueRunnable;
+import com.szw.trading.order.runnable.LimitOrderQueueRunnable;
 import com.szw.trading.persistence.entity.Order;
 import com.szw.util.RedisCacheUtil;
 
 
 /**
- * 创建线程，监控redis市价单队列,提交到交易模块
+ * 创建线程，监控redis限价单队列,提交到交易模块
  * 
- * @author 苏镇威 2018年1月18日 下午5:47:22
+ * @author 苏镇威 2018年1月26日 下午4:34:13
  */
-@Service
-public class MarketOrderQueueProcessor {
+public class LimitOrderQueueProcessor {
 
 	private ExecutorService threadPool = Executors.newSingleThreadExecutor();
 
@@ -33,7 +31,7 @@ public class MarketOrderQueueProcessor {
 
 	public void execute() {
 		try {
-			threadPool.submit(new MarketOrderQueueRunnable(redisCacheUtil, getMarketDataByCodeUrl, tradeUrl));
+			threadPool.submit(new LimitOrderQueueRunnable(redisCacheUtil, getMarketDataByCodeUrl, tradeUrl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

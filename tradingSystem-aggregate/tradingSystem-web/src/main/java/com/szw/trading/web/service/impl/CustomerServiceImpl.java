@@ -52,7 +52,6 @@ public class CustomerServiceImpl implements CustomerService {
 	private OrderNoGenerator orderNoGenerator;
 	@Autowired
 	private OrderRepository orderRepository;
-
 	@Autowired
 	private OrdersMapper orderMapper;
 
