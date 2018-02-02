@@ -3,7 +3,6 @@ package com.szw.trading.web.service.impl;
 import java.security.Principal;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,15 +29,14 @@ import com.szw.trading.web.constants.Offsetted;
 import com.szw.trading.web.constants.OrderQueueName;
 import com.szw.trading.web.constants.OrderStatus;
 import com.szw.trading.web.constants.OrderType;
+import com.szw.trading.web.service.BaseService;
 import com.szw.trading.web.service.CustomerService;
 import com.szw.util.OrderNoGenerator;
 import com.szw.util.RedisCacheUtil;
 
 
 @Service
-public class CustomerServiceImpl implements CustomerService {
-
-	private Logger log = Logger.getLogger(getClass());
+public class CustomerServiceImpl extends BaseService implements CustomerService {
 
 	@Autowired
 	private LoginRepository loginRepository;
