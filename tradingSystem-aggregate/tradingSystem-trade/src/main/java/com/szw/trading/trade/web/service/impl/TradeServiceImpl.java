@@ -165,6 +165,7 @@ public class TradeServiceImpl implements TradeService {
 
 		// 旧订单相关
 		oldOrder.setOffsetted(Offsetted.OFFSETTED);
+		oldOrder.setStatus(OrderStatus.OFFSETTED);
 		oldOrder.setUpdateTime(new Date());
 		oldOrder.setWinLoss(order.getOrderAmount().subtract(oldOrder.getOrderAmount()));
 		orderRepository.save(oldOrder);

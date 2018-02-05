@@ -2,6 +2,7 @@ package com.szw.trading.web.controller;
 
 import java.security.Principal;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -26,7 +27,7 @@ public class CustomerController {
 	@Autowired
 	private CustomerService customerService;
 
-	@RequestMapping("/customer/createOrder")
+	@RequestMapping("/api/customer/createOrder")
 	@ResponseBody
 	public Response createOrder(Principal principal, @Valid @RequestBody CreateOrderRequest request, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -38,10 +39,10 @@ public class CustomerController {
 		return customerService.createOrder(principal, request);
 	}
 
-	@RequestMapping("/customer/queryOrder")
+	@RequestMapping("/api/customer/queryOrder")
 	@ResponseBody
-	public Response queryOrder(Principal principal, @RequestBody SearchRequest request) {
-
+	public Response queryOrder(Principal principal, @RequestBody SearchRequest request, HttpServletRequest hsRequest) {
+		log.info("查询订单接口sessionID = " + hsRequest.getSession().getId());
 		return customerService.queryOrder(principal, request);
 	}
 

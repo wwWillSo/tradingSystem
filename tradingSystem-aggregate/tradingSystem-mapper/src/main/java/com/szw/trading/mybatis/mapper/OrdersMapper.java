@@ -1,28 +1,34 @@
 package com.szw.trading.mybatis.mapper;
 
-import com.szw.trading.mybatis.entity.Orders;
-import com.szw.trading.mybatis.entity.OrdersExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
+import com.szw.trading.mybatis.entity.Orders;
+import com.szw.trading.mybatis.entity.OrdersExample;
+
+
 public interface OrdersMapper {
-    long countByExample(OrdersExample example);
+	long countByExample(OrdersExample example);
 
-    int deleteByPrimaryKey(Long orderId);
+	int deleteByPrimaryKey(Long orderId);
 
-    int insert(Orders record);
+	int insert(Orders record);
 
-    int insertSelective(Orders record);
+	int insertSelective(Orders record);
 
-    List<Orders> selectByExample(OrdersExample example);
+	List<Orders> selectByExample(OrdersExample example);
 
-    Orders selectByPrimaryKey(Long orderId);
+	Orders selectByPrimaryKey(Long orderId);
 
-    int updateByExampleSelective(@Param("record") Orders record, @Param("example") OrdersExample example);
+	int updateByExampleSelective(@Param("record") Orders record, @Param("example") OrdersExample example);
 
-    int updateByExample(@Param("record") Orders record, @Param("example") OrdersExample example);
+	int updateByExample(@Param("record") Orders record, @Param("example") OrdersExample example);
 
-    int updateByPrimaryKeySelective(Orders record);
+	int updateByPrimaryKeySelective(Orders record);
 
-    int updateByPrimaryKey(Orders record);
+	int updateByPrimaryKey(Orders record);
+
+	List<Orders> selectByParams(Map<String, Object> map);
 }

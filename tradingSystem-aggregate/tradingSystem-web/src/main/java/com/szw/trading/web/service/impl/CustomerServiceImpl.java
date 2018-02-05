@@ -2,6 +2,8 @@ package com.szw.trading.web.service.impl;
 
 import java.security.Principal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.szw.trading.mybatis.entity.Orders;
-import com.szw.trading.mybatis.entity.OrdersExample;
 import com.szw.trading.mybatis.mapper.OrdersMapper;
 import com.szw.trading.persistence.entity.Customer;
 import com.szw.trading.persistence.entity.CustomerTradingAccount;
@@ -27,6 +28,7 @@ import com.szw.trading.web.bean.Response;
 import com.szw.trading.web.bean.SearchRequest;
 import com.szw.trading.web.constants.Offsetted;
 import com.szw.trading.web.constants.OrderQueueName;
+import com.szw.trading.web.constants.OrderSide;
 import com.szw.trading.web.constants.OrderStatus;
 import com.szw.trading.web.constants.OrderType;
 import com.szw.trading.web.service.BaseService;
@@ -88,11 +90,13 @@ public class CustomerServiceImpl extends BaseService implements CustomerService 
 		CustomerTradingAccount cta = customerTradingAccountRepository.findByCustomerId(login.getCustomerId());
 
 		PageHelper.startPage(request.getPageNo(), request.getPageSize());
-		OrdersExample example = new OrdersExample();
-		example.createCriteria().andTradingAccountIdEqualTo(cta.getTradingAccountId().longValue()).andStockCodeLike(request.getKeyword());
-		PageInfo<Orders> pageInfo = new PageInfo<Orders>(orderMapper.selectByExample(example));
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("tradingAccountId", cta.getTradingAccountId());
+		map.put("stockCode", request.getKeyword());
+		map.put("orderSide", OrderSide.BUY);
+		PageInfo<Orders> pageInfo = new PageInfo<Orders>(orderMapper.selectByParams(map));
 
-		return Response.SUCCESS(pageInfo.getList());
+		return Response.SUCCESS(pageInfo);
 	}
 
 	public String genLimitOrderQueueName(String stockcode) {

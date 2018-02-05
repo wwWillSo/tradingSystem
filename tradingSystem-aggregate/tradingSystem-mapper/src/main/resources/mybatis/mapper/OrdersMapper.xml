@@ -378,4 +378,21 @@
       win_loss = #{winLoss,jdbcType=DECIMAL}
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
+  
+  <select id="selectByParams" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `order`
+    <where>
+    	<if test="tradingAccountId != null and tradingAccountId != ''">
+    		trading_account_id = #{tradingAccountId} 
+    	</if>
+    	<if test="stockCode != null and stockCode != ''">
+    		and stock_code like concat('%',#{stockCode},'%')
+    	</if>
+		<if test="orderSide != null">
+			and order_side = #{orderSide}
+		</if>
+    </where>
+  </select>
 </mapper>

@@ -17,6 +17,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -119,7 +120,21 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		properties.setProperty("rowBoundsWithCount", "true");
 		properties.setProperty("reasonable", "true");
 		properties.setProperty("dialect", "mysql");    // 配置mysql数据库的方言
+		properties.setProperty("reasonable", "false");
 		pageHelper.setProperties(properties);
 		return pageHelper;
+	}
+
+	/**
+	 * 跨域访问
+	 * 
+	 * @author 苏镇威 2018年2月7日 上午10:56:51
+	 */
+
+	// 设置跨域访问
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "TRACE", "INCLUDE")
+				.allowCredentials(true);
 	}
 }
