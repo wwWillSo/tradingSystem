@@ -56,7 +56,7 @@ public class LimitOrderQueueRunnable implements Callable<LimitOrderQueueRunnable
 			JSONObject obj = JSONObject.parseObject(message);
 			RealTimeMarketdata marketdata = obj.toJavaObject(RealTimeMarketdata.class);
 
-			String queueName = genLimitOrderQueueName(marketdata.getStockcode());
+			String queueName = genLimitOrderQueueName(marketdata.getStockcode(), marketdata.getNow());
 			// 该限价单队列有订单存在
 			while (redisCacheUtil.getCacheListSize(queueName) > 0) {
 				Order order = redisCacheUtil.popCacheList(queueName);
@@ -101,7 +101,7 @@ public class LimitOrderQueueRunnable implements Callable<LimitOrderQueueRunnable
 		}
 	}
 
-	public String genLimitOrderQueueName(String stockcode) {
-		return OrderQueueName.LIMIT_ORDER_QUEUE.name() + ":" + stockcode;
+	public String genLimitOrderQueueName(String stockcode, BigDecimal orderPrice) {
+		return OrderQueueName.LIMIT_ORDER_QUEUE.name() + ":" + stockcode + "-" + orderPrice;
 	}
 }

@@ -77,7 +77,7 @@ public class CustomerServiceImpl extends BaseService implements CustomerService 
 		if (OrderType.MARKET_ORDER == order.getOrderType()) {
 			redisCacheUtil.pushCacheList(OrderQueueName.MARKET_ORDER_QUEUE.name(), rtnOrder);
 		} else if (OrderType.LIMIT_ORDER == order.getOrderType()) {
-			redisCacheUtil.pushCacheList(genLimitOrderQueueName(order.getStockCode()), rtnOrder);
+			redisCacheUtil.pushCacheList(genLimitOrderQueueName(rtnOrder), rtnOrder);
 		}
 
 		return Response.SUCCESS(order);
@@ -99,8 +99,8 @@ public class CustomerServiceImpl extends BaseService implements CustomerService 
 		return Response.SUCCESS(pageInfo);
 	}
 
-	public String genLimitOrderQueueName(String stockcode) {
-		return OrderQueueName.LIMIT_ORDER_QUEUE.name() + ":" + stockcode;
+	public String genLimitOrderQueueName(Order order) {
+		return OrderQueueName.LIMIT_ORDER_QUEUE.name() + ":" + order.getStockCode() + "-" + order.getOrderPrice();
 	}
 
 }
