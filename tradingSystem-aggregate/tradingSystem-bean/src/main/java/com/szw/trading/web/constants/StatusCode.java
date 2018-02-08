@@ -27,6 +27,19 @@ public enum StatusCode {
 	 * 卖出数与原订单买入数不符
 	 */
 	QUANTITY_NOT_ENOUGH("E0006", "卖出数与原订单买入数不符"),
+	/**
+	 * 订单已被取消
+	 */
+	ORDER_HAS_BEEN_CANCELED("E0007", "订单已被取消"),
+	/**
+	 * 要卖出的订单状态不能卖出
+	 */
+	OLD_ORDER_NOT_ALLOW_TO_SELL("E0008", "要卖出的订单状态不能卖出"),
+
+	/**
+	 * 未知错误
+	 */
+	UNKNOWN_ERROR("E500", "系统未知错误"),
 
 	/**
 	 * 失败

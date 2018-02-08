@@ -6,4 +6,5 @@ public class OrderStatus {
 	public final static int SUCCESS = 2;
 	public final static int FAIL = 3;
 	public final static int OFFSETTED = 4;
+	public final static int CANCELED = 5;
 }

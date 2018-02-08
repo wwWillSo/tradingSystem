@@ -13,18 +13,14 @@ import com.alibaba.fastjson.JSON;
 import com.szw.trading.persistence.entity.CustomerTradingAccount;
 import com.szw.trading.persistence.entity.InvestmentSummary;
 import com.szw.trading.persistence.entity.Order;
-import com.szw.trading.persistence.repository.CustomerRepository;
 import com.szw.trading.persistence.repository.CustomerTradingAccountRepository;
 import com.szw.trading.persistence.repository.InvestmentSummaryRepository;
-import com.szw.trading.persistence.repository.LoginRepository;
 import com.szw.trading.persistence.repository.OrderRepository;
 import com.szw.trading.trade.web.service.TradeService;
 import com.szw.trading.web.bean.Response;
 import com.szw.trading.web.constants.Offsetted;
 import com.szw.trading.web.constants.OrderStatus;
 import com.szw.trading.web.constants.StatusCode;
-import com.szw.util.OrderNoGenerator;
-import com.szw.util.RedisCacheUtil;
 
 
 @Service
@@ -33,15 +29,7 @@ public class TradeServiceImpl implements TradeService {
 	private final Logger log = Logger.getLogger(TradeServiceImpl.class);
 
 	@Autowired
-	private LoginRepository loginRepository;
-	@Autowired
-	private CustomerRepository customerRepository;
-	@Autowired
 	private CustomerTradingAccountRepository customerTradingAccountRepository;
-	@Autowired
-	private RedisCacheUtil<Order> redisCacheUtil;
-	@Autowired
-	private OrderNoGenerator orderNoGenerator;
 	@Autowired
 	private OrderRepository orderRepository;
 	@Autowired
@@ -73,13 +61,29 @@ public class TradeServiceImpl implements TradeService {
 			return Response.RESULT(StatusCode.USABLE_AMOUNT_NOT_ENOUGH.getCode(), StatusCode.USABLE_AMOUNT_NOT_ENOUGH.getDesc(), order);
 		}
 
-		if (null != orderRepository.findByOrderNoAndStatus(order.getOrderNo(), OrderStatus.SUCCESS)) {
-			log.info("【买入】交易失败, 订单号重复");
+		Order persistOrder = orderRepository.findByOrderNoAndTradingAccountId(order.getOrderNo(), cta.getTradingAccountId());
+
+		if (null == persistOrder) {
+
+			log.info("【买入】交易失败, 数据库中不存在此订单记录");
 
 			order.setStatus(OrderStatus.FAIL);
 
 			orderRepository.save(order);
-			return Response.RESULT(StatusCode.ORDER_NO_EXISTS.getCode(), StatusCode.ORDER_NO_EXISTS.getDesc(), order);
+			return Response.RESULT(StatusCode.UNKNOWN_ERROR.getCode(), StatusCode.UNKNOWN_ERROR.getDesc(), order);
+		}
+
+		if (OrderStatus.PENDING != persistOrder.getStatus() && OrderStatus.WAITING != persistOrder.getStatus()) {
+
+			if (OrderStatus.CANCELED != persistOrder.getStatus()) {
+				log.info("【买入】交易失败，订单号重复");
+				order.setStatus(OrderStatus.FAIL);
+				orderRepository.save(order);
+				return Response.RESULT(StatusCode.ORDER_NO_EXISTS.getCode(), StatusCode.ORDER_NO_EXISTS.getDesc(), order);
+			} else {
+				log.info("【买入】交易失败，此订单已被取消，跳过处理");
+				return Response.RESULT(StatusCode.ORDER_HAS_BEEN_CANCELED.getCode(), StatusCode.ORDER_HAS_BEEN_CANCELED.getDesc(), persistOrder);
+			}
 		}
 
 		// 交易账户相关
@@ -103,13 +107,13 @@ public class TradeServiceImpl implements TradeService {
 
 		// 订单相关
 		order.setStatus(OrderStatus.SUCCESS);
-		orderRepository.save(order);
+		Order rtnOrder = orderRepository.save(order);
 
-		log.info("【买入】交易成功, order = " + JSON.toJSONString(order));
+		log.info("【买入】交易成功, order = " + JSON.toJSONString(rtnOrder));
 
 		log.info("【处理订单】结束...orderType = " + order.getOrderType());
 
-		return Response.SUCCESS(order);
+		return Response.SUCCESS(rtnOrder);
 	}
 
 	@Override
@@ -135,16 +139,32 @@ public class TradeServiceImpl implements TradeService {
 			return Response.RESULT(StatusCode.USABLE_AMOUNT_NOT_ENOUGH.getCode(), StatusCode.USABLE_AMOUNT_NOT_ENOUGH.getDesc(), order);
 		}
 
-		if (null != orderRepository.findByOrderNoAndStatus(order.getOrderNo(), OrderStatus.SUCCESS)) {
-			log.info("【卖出】交易失败, 订单号重复");
+		Order persistOrder = orderRepository.findByOrderNoAndTradingAccountId(order.getOrderNo(), cta.getTradingAccountId());
+
+		if (null == persistOrder) {
+
+			log.info("【卖出】交易失败, 数据库中不存在此订单记录");
 
 			order.setStatus(OrderStatus.FAIL);
 
 			orderRepository.save(order);
-			return Response.RESULT(StatusCode.ORDER_NO_EXISTS.getCode(), StatusCode.ORDER_NO_EXISTS.getDesc(), order);
+			return Response.RESULT(StatusCode.UNKNOWN_ERROR.getCode(), StatusCode.UNKNOWN_ERROR.getDesc(), order);
 		}
 
-		Order oldOrder = orderRepository.findByOrderNoAndStatus(order.getOffsetOrderNo(), OrderStatus.SUCCESS);
+		if (OrderStatus.PENDING != persistOrder.getStatus() && OrderStatus.WAITING != persistOrder.getStatus()) {
+
+			if (OrderStatus.CANCELED != persistOrder.getStatus()) {
+				log.info("【卖出】交易失败，订单号重复");
+				order.setStatus(OrderStatus.FAIL);
+				orderRepository.save(order);
+				return Response.RESULT(StatusCode.ORDER_NO_EXISTS.getCode(), StatusCode.ORDER_NO_EXISTS.getDesc(), order);
+			} else {
+				log.info("【卖出】交易失败，此订单已被取消，跳过处理");
+				return Response.RESULT(StatusCode.ORDER_HAS_BEEN_CANCELED.getCode(), StatusCode.ORDER_HAS_BEEN_CANCELED.getDesc(), persistOrder);
+			}
+		}
+
+		Order oldOrder = orderRepository.findByOrderNoAndTradingAccountId(order.getOffsetOrderNo(), cta.getTradingAccountId());
 		if (null == oldOrder) {
 			log.info("【卖出】交易失败, 要卖出的订单号不存在");
 
@@ -152,6 +172,15 @@ public class TradeServiceImpl implements TradeService {
 
 			orderRepository.save(order);
 			return Response.RESULT(StatusCode.OLD_ORDER_NO_NOT_EXISTS.getCode(), StatusCode.OLD_ORDER_NO_NOT_EXISTS.getDesc(), order);
+		}
+
+		if (OrderStatus.SUCCESS != oldOrder.getStatus()) {
+			log.info("【卖出】交易失败, 要卖出的订单状态不允许卖出");
+
+			order.setStatus(OrderStatus.FAIL);
+
+			orderRepository.save(order);
+			return Response.RESULT(StatusCode.OLD_ORDER_NOT_ALLOW_TO_SELL.getCode(), StatusCode.OLD_ORDER_NOT_ALLOW_TO_SELL.getDesc(), order);
 		}
 
 		if (oldOrder.getOrderHand().compareTo(order.getOrderHand()) != 0) {
@@ -183,11 +212,11 @@ public class TradeServiceImpl implements TradeService {
 
 		// 订单相关
 		order.setStatus(OrderStatus.SUCCESS);
-		orderRepository.save(order);
+		Order rtnOrder = orderRepository.save(order);
 
-		log.info("【卖出】交易成功, order = " + JSON.toJSONString(order));
+		log.info("【卖出】交易成功, order = " + JSON.toJSONString(rtnOrder));
 
-		return Response.SUCCESS(order);
+		return Response.SUCCESS(rtnOrder);
 	}
 
 }

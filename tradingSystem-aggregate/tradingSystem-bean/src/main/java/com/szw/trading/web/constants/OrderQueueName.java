@@ -13,7 +13,7 @@ public enum OrderQueueName {
 	LIMIT_ORDER_QUEUE,
 
 	/**
-	 * 待成交队列
+	 * 待取消单队列
 	 */
-	TRADE_MANAGE_QUEUE,
+	CANCEL_ORDER_QUEUE
 }

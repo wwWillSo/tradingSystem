@@ -23,6 +23,7 @@ import com.szw.trading.persistence.repository.CustomerRepository;
 import com.szw.trading.persistence.repository.CustomerTradingAccountRepository;
 import com.szw.trading.persistence.repository.LoginRepository;
 import com.szw.trading.persistence.repository.OrderRepository;
+import com.szw.trading.web.bean.CancelOrderRequest;
 import com.szw.trading.web.bean.CreateOrderRequest;
 import com.szw.trading.web.bean.Response;
 import com.szw.trading.web.bean.SearchRequest;
@@ -101,6 +102,26 @@ public class CustomerServiceImpl extends BaseService implements CustomerService 
 
 	public String genLimitOrderQueueName(Order order) {
 		return OrderQueueName.LIMIT_ORDER_QUEUE.name() + ":" + order.getStockCode() + "-" + order.getOrderPrice();
+	}
+
+	@Override
+	public Response cancelOrder(Principal principal, CancelOrderRequest request) {
+		Login login = loginRepository.findByLoginId(Integer.valueOf(principal.getName()));
+		CustomerTradingAccount cta = customerTradingAccountRepository.findByCustomerId(login.getCustomerId());
+		Order order = orderRepository.findByOrderNoAndTradingAccountId(request.getCancelOrderNo(), cta.getTradingAccountId());
+
+		if (null == order) {
+			return Response.FAILUE("订单不存在");
+		}
+		if (OrderStatus.PENDING != order.getStatus() && OrderStatus.WAITING != order.getStatus()) {
+			return Response.FAILUE("订单状态不允许取消");
+		}
+
+		order.setStatus(OrderStatus.CANCELED);
+		order.setUpdateTime(new Date());
+		Order rtnOrder = orderRepository.save(order);
+
+		return Response.SUCCESS(rtnOrder);
 	}
 
 }
