@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 @PropertySource(value = { "file:${user.dir}/config/application.properties", "file:${user.dir}/config/persistence.properties",
-		"file:${user.dir}/config/redis.properties" })
+		"file:${user.dir}/config/redis.properties", "file:${user.dir}/config/threadPool.properties" })
 @EnableWebMvc
 @ComponentScan(basePackages = { "com" })
 @EnableJpaRepositories(basePackages = { "com" })

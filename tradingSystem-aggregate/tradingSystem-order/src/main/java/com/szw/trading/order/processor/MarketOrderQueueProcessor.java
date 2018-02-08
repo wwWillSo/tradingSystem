@@ -17,6 +17,7 @@ import com.szw.util.RedisCacheUtil;
  * 
  * @author 苏镇威 2018年1月18日 下午5:47:22
  */
+@Deprecated
 @Service
 public class MarketOrderQueueProcessor {
 

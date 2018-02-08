@@ -1,7 +1,6 @@
 package com.szw.trading.order.runnable;
 
 import java.math.BigDecimal;
-import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
 
@@ -15,7 +14,7 @@ import com.szw.util.HttpClientUtils;
 import com.szw.util.RedisCacheUtil;
 
 
-public class MarketOrderQueueRunnable implements Callable<MarketOrderQueueRunnable> {
+public class MarketOrderQueueRunnable implements Runnable {
 
 	private final Logger log = Logger.getLogger(MarketOrderQueueRunnable.class);
 
@@ -32,7 +31,9 @@ public class MarketOrderQueueRunnable implements Callable<MarketOrderQueueRunnab
 	}
 
 	@Override
-	public MarketOrderQueueRunnable call() throws Exception {
+	public void run() {
+
+		log.info("【市价单交易请求】线程启动...");
 
 		while (true) {
 			Order order = redisCacheUtil.popCacheList(OrderQueueName.MARKET_ORDER_QUEUE.name());

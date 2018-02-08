@@ -17,6 +17,7 @@ import com.szw.util.RedisCacheUtil;
  * 
  * @author 苏镇威 2018年1月26日 下午4:34:13
  */
+@Deprecated
 @Service
 public class LimitOrderQueueProcessor {
 

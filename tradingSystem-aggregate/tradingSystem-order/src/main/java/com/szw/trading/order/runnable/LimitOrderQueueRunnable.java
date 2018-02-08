@@ -1,7 +1,6 @@
 package com.szw.trading.order.runnable;
 
 import java.math.BigDecimal;
-import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
 import org.zeromq.ZMQ;
@@ -19,7 +18,7 @@ import com.szw.util.HttpClientUtils;
 import com.szw.util.RedisCacheUtil;
 
 
-public class LimitOrderQueueRunnable implements Callable<LimitOrderQueueRunnable> {
+public class LimitOrderQueueRunnable implements Runnable {
 
 	private final Logger log = Logger.getLogger(LimitOrderQueueRunnable.class);
 
@@ -39,7 +38,9 @@ public class LimitOrderQueueRunnable implements Callable<LimitOrderQueueRunnable
 	}
 
 	@Override
-	public LimitOrderQueueRunnable call() throws Exception {
+	public void run() {
+
+		log.info("【限价单交易请求】线程启动...");
 
 		Context context = ZMQ.context(1);
 		Socket subscriber = context.socket(ZMQ.SUB);
