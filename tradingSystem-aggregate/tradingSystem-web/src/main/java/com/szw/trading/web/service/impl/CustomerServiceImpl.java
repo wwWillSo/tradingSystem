@@ -13,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.szw.trading.mybatis.entity.InvestmentSummary;
 import com.szw.trading.mybatis.entity.Orders;
+import com.szw.trading.mybatis.mapper.InvestmentSummaryMapper;
 import com.szw.trading.mybatis.mapper.OrdersMapper;
 import com.szw.trading.persistence.entity.Customer;
 import com.szw.trading.persistence.entity.CustomerTradingAccount;
@@ -55,6 +57,8 @@ public class CustomerServiceImpl extends BaseService implements CustomerService 
 	private OrderRepository orderRepository;
 	@Autowired
 	private OrdersMapper orderMapper;
+	@Autowired
+	private InvestmentSummaryMapper investmentSummaryMapper;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
@@ -122,6 +126,27 @@ public class CustomerServiceImpl extends BaseService implements CustomerService 
 		Order rtnOrder = orderRepository.save(order);
 
 		return Response.SUCCESS(rtnOrder);
+	}
+
+	@Override
+	public Response queryInvestmentSummary(Principal principal, SearchRequest request) {
+		Login login = loginRepository.findByLoginId(Integer.valueOf(principal.getName()));
+		CustomerTradingAccount cta = customerTradingAccountRepository.findByCustomerId(login.getCustomerId());
+
+		PageHelper.startPage(request.getPageNo(), request.getPageSize());
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("tradingAccountId", cta.getTradingAccountId());
+		PageInfo<InvestmentSummary> pageInfo = new PageInfo<InvestmentSummary>(investmentSummaryMapper.selectByParams(map));
+
+		return Response.SUCCESS(pageInfo);
+	}
+
+	@Override
+	public Response queryAccount(Principal principal) {
+		Login login = loginRepository.findByLoginId(Integer.valueOf(principal.getName()));
+		CustomerTradingAccount cta = customerTradingAccountRepository.findByCustomerId(login.getCustomerId());
+
+		return Response.SUCCESS(cta);
 	}
 
 }

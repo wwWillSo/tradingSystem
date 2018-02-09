@@ -14,4 +14,8 @@ public interface CustomerService {
 	Response queryOrder(Principal principal, SearchRequest request);
 
 	Response cancelOrder(Principal principal, CancelOrderRequest request);
+
+	Response queryInvestmentSummary(Principal principal, SearchRequest request);
+
+	Response queryAccount(Principal principal);
 }

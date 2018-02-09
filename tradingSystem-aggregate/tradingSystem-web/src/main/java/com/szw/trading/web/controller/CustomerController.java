@@ -62,4 +62,16 @@ public class CustomerController {
 	public String getValidString(BindingResult bindingResult) {
 		return bindingResult.getFieldError().getField() + bindingResult.getFieldError().getDefaultMessage();
 	}
+
+	@RequestMapping("/api/customer/queryInvestmentSummary")
+	@ResponseBody
+	public Response queryInvestmentSummary(Principal principal, @RequestBody SearchRequest request) {
+		return customerService.queryInvestmentSummary(principal, request);
+	}
+
+	@RequestMapping("/api/customer/queryAccount")
+	@ResponseBody
+	public Response queryAccount(Principal principal) {
+		return customerService.queryAccount(principal);
+	}
 }

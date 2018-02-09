@@ -130,15 +130,6 @@ public class TradeServiceImpl implements TradeService {
 			return Response.RESULT(StatusCode.TRADING_ACCOUNT_NOT_EXISTS.getCode(), StatusCode.TRADING_ACCOUNT_NOT_EXISTS.getDesc(), order);
 		}
 
-		if ((cta.getUsableAmount().add(order.getOrderAmount())).compareTo(order.getServiceAmount()) < 0) {
-			log.info("【卖出】交易失败, 交易账户余额不足");
-
-			order.setStatus(OrderStatus.FAIL);
-
-			orderRepository.save(order);
-			return Response.RESULT(StatusCode.USABLE_AMOUNT_NOT_ENOUGH.getCode(), StatusCode.USABLE_AMOUNT_NOT_ENOUGH.getDesc(), order);
-		}
-
 		Order persistOrder = orderRepository.findByOrderNoAndTradingAccountId(order.getOrderNo(), cta.getTradingAccountId());
 
 		if (null == persistOrder) {
@@ -190,6 +181,16 @@ public class TradeServiceImpl implements TradeService {
 
 			orderRepository.save(order);
 			return Response.RESULT(StatusCode.QUANTITY_NOT_ENOUGH.getCode(), StatusCode.QUANTITY_NOT_ENOUGH.getDesc(), order);
+		}
+
+		if ((cta.getUsableAmount().add(oldOrder.getOrderAmount()).add(order.getOrderAmount().subtract(oldOrder.getOrderAmount())))
+				.compareTo(order.getServiceAmount()) < 0) {
+			log.info("【卖出】交易失败, 交易账户余额不足");
+
+			order.setStatus(OrderStatus.FAIL);
+
+			orderRepository.save(order);
+			return Response.RESULT(StatusCode.USABLE_AMOUNT_NOT_ENOUGH.getCode(), StatusCode.USABLE_AMOUNT_NOT_ENOUGH.getDesc(), order);
 		}
 
 		// 旧订单相关
