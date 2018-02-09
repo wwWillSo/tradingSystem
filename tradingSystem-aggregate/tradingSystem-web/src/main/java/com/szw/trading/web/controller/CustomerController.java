@@ -5,7 +5,6 @@ import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -21,9 +20,7 @@ import com.szw.trading.web.service.CustomerService;
 
 
 @Controller
-public class CustomerController {
-
-	private Logger log = Logger.getLogger(getClass());
+public class CustomerController extends BaseController {
 
 	@Autowired
 	private CustomerService customerService;
@@ -57,10 +54,6 @@ public class CustomerController {
 	public Response queryOrder(Principal principal, @RequestBody SearchRequest request, HttpServletRequest hsRequest) {
 		log.info("查询订单接口sessionID = " + hsRequest.getSession().getId());
 		return customerService.queryOrder(principal, request);
-	}
-
-	public String getValidString(BindingResult bindingResult) {
-		return bindingResult.getFieldError().getField() + bindingResult.getFieldError().getDefaultMessage();
 	}
 
 	@RequestMapping("/api/customer/queryInvestmentSummary")

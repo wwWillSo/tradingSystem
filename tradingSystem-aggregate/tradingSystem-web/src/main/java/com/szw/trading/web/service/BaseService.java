@@ -4,5 +4,5 @@ import org.apache.log4j.Logger;
 
 
 public class BaseService {
-	private Logger log = Logger.getLogger(getClass());
+	protected Logger log = Logger.getLogger(getClass());
 }
